@@ -21,9 +21,14 @@
 			<form id="registerForm" action="{{ route('register') }}" method="POST">
 				@csrf
 				<h1>Register</h1>
-				<input type="text" name="name" placeholder="Nama" style="margin-top: 30px;" required />
+				<input type="text" name="name" placeholder="Username" style="margin-top: 30px;" required />
 				<input type="email" name="email" placeholder="Email" required />
 				<input type="password" name="password" placeholder="Password" required />
+				{{-- <select name="role" required style="margin-top: 10px;">
+					<option value="">Pilih Role</option>
+					<option value="agen_lpg">Agen Lpg</option>
+					<option value="distributor">Distributor</option>
+				</select> --}}
 				<button id="registerButton" style="margin-top: 30px;" type="submit">Register</button>
 			</form>
 		</div>

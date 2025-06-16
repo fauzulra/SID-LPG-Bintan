@@ -36,6 +36,21 @@ class PenjualanController extends Controller
         return view('penjualan.index',compact(['sales', 'distributor','penerima' ]));
     }
 
+    public function filter(Request $request)
+    {
+        $distributorId = $request->distributor_id;
+
+        $query = Sales::with(['penerima', 'distributor']);
+
+        if ($distributorId) {
+            $query->where('id_distributor', $distributorId);
+        }
+
+        $sales = $query->get();
+
+        return view('partials.sales_table', compact('sales'));
+    }
+    
     public function create()
     {
         $user = Auth::user();
@@ -64,21 +79,9 @@ class PenjualanController extends Controller
                 'total_harga' => 'required|numeric',
             ]);
 
-            $tanggalHariIni = now()->toDateString();
-
-            // Hitung total pembelian hari ini oleh penerima
-            $totalHariIni = Sales::where('id_penerima', $request->id_penerima)
-                ->whereDate('created_at', $tanggalHariIni)
-                ->sum('jumlah_barang');
-
-            $totalBaru = $totalHariIni + $request->jumlah_barang;
-
-            if ($totalBaru > 2) {
-                return redirect()->back()->with('error', 'Setiap penerima hanya dapat membeli maksimal 2 barang per hari.')->withInput();
-            }
-
             // Generate nomor transaksi otomatis
             $tanggal = now()->format('Ymd'); // contoh: 20250425
+            
             $prefix = 'TRX-' . $tanggal;
 
             // Hitung transaksi pada hari ini
@@ -125,6 +128,7 @@ class PenjualanController extends Controller
         }
     }
 
+    //laporan penjualan
     public function printRange(Request $request)
     {
         $request->validate([
@@ -140,22 +144,27 @@ class PenjualanController extends Controller
             ->orderBy('created_at', 'asc');
 
         // Cek role user
+        $judul = 'Laporan Penjualan';
+
         if (Auth::user()->hasRole('distributor')) {
-            // Kalau distributor, batasi hanya tokonya sendiri
             $distributor = Distributor::where('id_user', Auth::id())->first();
             if ($distributor) {
                 $query->where('id_toko', $distributor->id);
+                $judul .= ' - ' . $distributor->nama_toko;
             }
         } elseif (Auth::user()->hasRole('admin')) {
-            // Kalau admin, cek apakah memilih id_toko
             if (!empty($request->id_toko)) {
                 $query->where('id_toko', $request->id_toko);
+                $distributor = Distributor::find($request->id_toko);
+                if ($distributor) {
+                    $judul .= ' - ' . $distributor->nama_toko;
+                }
             }
         }
 
         $sales = $query->get();
 
-        $pdf = Pdf::loadView('penjualan.print-range', compact('sales', 'from', 'to'))
+        $pdf = Pdf::loadView('penjualan.print-range', compact('sales', 'from', 'to','judul'))
             ->setPaper('A4', 'portrait');
 
         return $pdf->download('Laporan-Penjualan-' . $from->format('j F Y') . '-sampai-' . $to->format('j F Y') . '.pdf');

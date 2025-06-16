@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgenController;
 use App\Models\User;
 use Spatie\Permission\Models\Role;  
 use Illuminate\Support\Facades\Auth;
@@ -43,13 +44,26 @@ Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 
 Route::middleware('auth')->group(function () {
-    
+
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/sales', [DashboardController::class, 'dashboardSales'])->name('dashboard.sales');
 
-    //Route tambah data distributor
+    // Route Data distributor (admin)
+    Route::get('/distributor/index', [DistributorController::class, 'index'])->name('distributor.index');
+    Route::get('/distributor/{id}/edit', [DistributorController::class, 'edit'])->name('distributor.edit');
+    
+
+    //Route data agen
+    Route::get('/agen', [AgenController::class, 'index'])->name('agen.index');
+
+
+    //Route data distributor
+    Route::get('/profile', [DistributorController::class, 'profile'])->name('distributor.profile');
+    Route::put('/profile/update', [DistributorController::class, 'update'])->name('distributor.update');
     Route::get('/distributor/create', [DistributorController::class, 'create'])->name('distributor.create');
     Route::post('/distributor', [DistributorController::class, 'store'])->name('distributor.store');
+    Route::patch('/admin/approval/{user}', [DistributorController::class, 'toggleApproval'])->name('admin.approval.toggle');
+    Route::delete('/admin/distributor/{user}', [DistributorController::class, 'destroy'])->name('admin.distributor.destroy');
     
     
     //Route stok
@@ -61,6 +75,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
     Route::get('/penjualan/create', [PenjualanController::class, 'create'])->name('penjualan.create');
     Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+    Route::get('/penjualan/filter', [PenjualanController::class, 'filter'])->name('penjualan.filter');
     Route::get('/penjualan/print-range', [PenjualanController::class, 'printRange'])->name('penjualan.print.range');
 
     //Route penerima

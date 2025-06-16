@@ -11,9 +11,30 @@ use Illuminate\Support\Facades\Auth;
 
 class DistributorController extends Controller
 {
-    /**
-     * Tampilkan form tambah data distributor.
-     */
+
+
+    public function index()
+    {
+        $user = User::find(Auth::id());
+        $distributor = Distributor::with('user')->get();
+
+        return view('distributor.index', compact(['distributor', 'user']));
+    }
+    public function profile()
+    {
+        $user = User::find(Auth::id());
+        $distributor = Distributor::where('id_user', $user->id)->first();
+
+        return view('distributor.profile', compact('distributor'));
+    }
+
+    public function edit()
+    {
+        $id = Auth::id();
+        $distributor = Distributor::with('user')->find($id);
+        return view('distributor.edit', compact('distributor'));
+    }
+
     public function create()
     {
         $distributors = Distributor::all();
@@ -55,5 +76,38 @@ class DistributorController extends Controller
         // Jika bukan distributor, arahkan ke dashboard langsung
         return redirect()->route('dashboard');
     }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        $distributor = $user->distributor; 
+
+        // Update data
+        $distributor->nama_toko = $request->nama_toko;
+        $distributor->alamat = $request->alamat;
+        $distributor->no_hp = $request->no_hp;
+        $distributor->save();
+
+        return redirect()->back()->with('success', 'Profil Pengguna Berhasil Diperbarui!');
+    }
+
+    public function toggleApproval(User $user)
+{
+    $user->is_approved = !$user->is_approved;
+    $user->save();
+
+    return redirect()->back()->with('success', 'Status approval berhasil diperbarui.');
+
+}
+    public function destroy(User $user)
+{
+    // Hapus distributor terkait (jika ada)
+    $user->distributor()->delete();
+
+    // Hapus user
+    $user->delete();
+
+    return redirect()->back()->with('success', 'Akun distributor berhasil dihapus.');
 }
 
+}

@@ -26,7 +26,14 @@
     </li>
     <li class="nav-item {{ Request::is('penjualan*') ? 'active' : '' }} ">
         <a class="nav-link" href="/penjualan">
-            <i class="fas fa-fw fa-dollar"></i>
+            <i class="fas fa-fw fa-dollar-sign"></i>
             <span>Data Penjualan Subsidi</span></a>
     </li>
+    @if (Auth::user()->hasRole('admin'))
+        <li class="nav-item {{ Request::is('distributor*') ? 'active' : '' }} ">
+            <a class="nav-link" href="{{ route('distributor.index') }}">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Data Distributor</span></a>
+        </li>
+    @endif
 </ul>

@@ -12,8 +12,8 @@ class StokController extends Controller
     public function index()
     {
         $stok = Stok::with('distributor')->get();
-        $distributors = Distributor::all();
-        return view('stok.index', compact(['stok','distributors']));
+        $distributor = Distributor::all();
+        return view('stok.index', compact(['stok','distributor']));
     }
 
     public function create()
@@ -57,9 +57,5 @@ class StokController extends Controller
     
     }
 
-    public function destroy($id)
-    {
-
-    }
 }
 

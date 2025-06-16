@@ -13,13 +13,11 @@
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div class="text-lg text-info font-weight-bold mt-auto ">Data Stok Subsidi</div>
-             @if(Auth::user()->hasRole('admin'))
                 <a href="#" data-toggle="modal" data-target="#CreateModal">
                     <button type="button" class="btn btn-outline-info">
                         <i class="fa-solid fa-plus mr-2"></i>Tambah Data
                     </button>
                 </a>
-            @endif
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -29,7 +27,7 @@
                             <th>Nama Distributor</th>
                             <th>Alamat Distributor</th>
                             <th>Jumlah Stok</th>
-                            <th>Tanggal Masuk</th>
+                            <th>Tanggal Stok Terbaru Masuk</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,12 +61,19 @@
                         <div class="form-group">
                             <label for="id_toko">Nama Distributor</label>
                             <b class="text-danger">*</b>
-                            <select name="id_toko" id="id_toko" class="form-control @error('id_toko') is-invalid @enderror">
-                                <option value="">Nama Distributor</option>
-                                @foreach ($distributors as $distributor)
-                                    <option value="{{ $distributor->id }}">{{ $distributor->nama_toko }}</option>
-                                @endforeach
-                            </select>
+                            @if(Auth::user()->hasRole('admin'))
+                                {{-- Admin bisa pilih --}}
+                                <select name="id_toko" id="id_toko" class="form-control @error('id_toko') is-invalid @enderror">
+                                    <option value="">Nama Distributor</option>
+                                    @foreach ($distributor as $dist)
+                                        <option value="{{ $dist->id }}">{{ $dist->nama_toko }}</option>
+                                    @endforeach
+                                </select>
+                            @else
+                                {{-- Distributor tidak bisa pilih, langsung hidden --}}
+                                <input type="hidden" name="id_toko" value="{{ $distributor->first()->id }}">
+                                <input type="text" class="form-control" value="{{ $distributor->first()->nama_toko }}" readonly>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="jumlah_barang">Jumlah Barang</label>

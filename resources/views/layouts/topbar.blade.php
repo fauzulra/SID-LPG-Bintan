@@ -10,7 +10,66 @@
         </div>
     </ul>
     <ul class="navbar-nav ml-auto flex-justify-content-between items-center">
-        @yield('print-button')
+        @if(Route::currentRouteName() === 'dashboard') 
+            <li class="nav-item dropdown no-arrow mx-1">
+                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell fa-fw"></i>
+                    <!-- Counter - Alerts -->
+                    @if(Auth::user()->hasRole('admin') && count($lowStockAdmin) > 0)
+                        <span class="badge badge-danger badge-counter">{{ count($lowStockAdmin) }}</span>
+                    @elseif(Auth::user()->hasRole('distributor') && count($lowStockDistributor) > 0)
+                        <span class="badge badge-danger badge-counter">{{ count($lowStockDistributor) }}</span>
+                    @endif
+                </a>
+                <!-- Dropdown - Alerts -->
+                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                    aria-labelledby="alertsDropdown">
+                    <h6 class="dropdown-header">
+                        Notification
+                    </h6>
+                    @if(Auth::user()->hasRole('admin'))
+                        @if(count($lowStockAdmin) > 0)
+                            @foreach($lowStockAdmin as $stok)
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-danger">
+                                            <i class="fas fa-warehouse text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">{{ \Carbon\Carbon::now()->format('d M Y') }}</div>
+                                        <span class="font-weight-bold ">Stok di {{ $stok->nama_toko }} tersisa {{$stok->total_stok  }}
+                                            unit!</span>
+                                    </div>
+                                </a>
+                            @endforeach
+                        @else
+                            <div class="dropdown-item text-center small text-gray-500">Tidak ada notifikasi terbaru</div>
+                        @endif
+                    @elseif(Auth::user()->hasRole('distributor'))
+                        @if(count($lowStockDistributor) > 0)
+                            @foreach($lowStockDistributor as $stok)
+                                <a class="dropdown-item d-flex align-items-center"  href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-danger">
+                                            <i class="fas fa-warehouse text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">{{ \Carbon\Carbon::now()->toDateString() }}</div>
+                                        <span class="text-gray-700">Stok Anda tersisa {{ $stok->jumlah_barang }} unit, segera hubungi admin!</span>
+                                    </div>
+                                </a>
+                            @endforeach
+                        @else
+                            <div class="dropdown-item text-center small text-gray-500">Tidak ada notifikasi terbaru</div>
+                        @endif
+                    @endif
+
+                </div>
+            </li>
+        @endif
         <div class="topbar-divider d-none d-sm-block"></div>
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
@@ -23,9 +82,16 @@
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                @if(Auth::user()->hasRole('distributor'))
+                    <a class="dropdown-item" href="{{ route('distributor.profile') }}">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400 mb-2"></i>
+                        Profil
+                    </a>
+                    <div class="dropdown-divider"></div>   
+                @endif 
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
+                    Keluar
                 </a>
             </div>
         </li>

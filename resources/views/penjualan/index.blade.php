@@ -11,54 +11,54 @@
 @section('page-title', 'Data Penjualan Subsidi')
 
 @section('content')
-    <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div class="text-lg text-info font-weight-bold mb-0">Data Penjualan Subsidi</div>
+        <div class="card shadow mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="text-lg text-info font-weight-bold mb-0">Data Penjualan Subsidi</div>
 
-            <div class="d-flex">
-                <a href="#" data-toggle="modal" data-target="#PrintModal">
-                    <button type="button" class="btn btn-outline-info mr-2">
-                        <i class="fa-solid fa-download mr-2"></i>Print
-                    </button>
-                </a>
-                <a href="#" data-toggle="modal" data-target="#CreateModal">
-                    <button type="button" class="btn btn-outline-info">
-                        <i class="fa-solid fa-plus mr-2"></i>Tambah Data
-                    </button>
-                </a>
+                <div class="d-flex">
+                    <a href="#" data-toggle="modal" data-target="#PrintModal">
+                        <button type="button" class="btn btn-outline-info mr-2">
+                            <i class="fa-solid fa-download mr-2"></i>Print
+                        </button>
+                    </a>
+                    <a href="#" data-toggle="modal" data-target="#CreateModal">
+                        <button type="button" class="btn btn-outline-info">
+                            <i class="fa-solid fa-plus mr-2"></i>Tambah Data
+                        </button>
+                    </a>
+                </div>
             </div>
-        </div>
-        
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Nomor Transaksi</th>
-                            <th>Nama Pembeli</th>
-                            <th>Nama Distributor</th>
-                            <th>Jumlah Barang</th>
-                            <th>Total Harga</th>
-                            <th>Tanggal Transaksi</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($sales as $data)
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
                             <tr>
-                                <td>{{ $data->nomor_transaksi }}</td>
-                                <td>{{ $data->penerima->nama ?? $data->penerima->nama_usaha ?? 'Data tidak ditemukan' }}</td>
-                                <td>{{ ucwords($data->distributor->nama_toko)   }}</td>
-                                <td>{{ $data->jumlah_barang }} Item</td>
-                                <td>Rp {{ $data->total_harga }}.000</td>
-                                <td>{{ \Carbon\Carbon::parse($data->created_at)->locale('id')->translatedFormat('l, j F Y, H:i') }} WIB</td>
+                                <th>Nomor Transaksi</th>
+                                <th>Nama Pembeli</th>
+                                <th>Nama Distributor</th>
+                                <th>Jumlah Barang</th>
+                                <th>Total Harga</th>
+                                <th>Tanggal Transaksi</th>
+
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($sales as $data)
+                                <tr>
+                                    <td>{{ $data->nomor_transaksi }}</td>
+                                    <td>{{ $data->penerima->nama ?? $data->penerima->nama_usaha ?? 'Data tidak ditemukan' }}</td>
+                                    <td>{{ ucwords($data->distributor->nama_toko)   }}</td>
+                                    <td>{{ $data->jumlah_barang }} Item</td>
+                                    <td>Rp {{ $data->total_harga }}.000</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->created_at)->locale('id')->translatedFormat('l, j F Y, H:i') }} WIB</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
     {{-- Create Modal --}}
     <div class="modal fade" id="CreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -150,13 +150,10 @@
                             <div class="form-group">
                                 <label for="jumlah_barang">Jumlah Barang</label>
                                 <input type="number" name="jumlah_barang" id="jumlah_barang"
-                                    class="form-control w-50 @error('jumlah_barang') is-invalid @enderror" required min="1" max="2">
+                                    class="form-control w-50 @error('jumlah_barang') is-invalid @enderror" required min="1" >
                                 @error('jumlah_barang')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <small class="form-text text-muted mt-1">
-                                    <em><span style="color: red">*</span>max 2 dalam sehari</em>
-                                </small>
                             </div>
                 
                             {{-- Harga Satuan --}}

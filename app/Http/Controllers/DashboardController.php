@@ -8,6 +8,7 @@ use App\Models\Sales;
 use App\Models\Reciepents;
 use App\Models\Distributor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,9 +23,15 @@ class DashboardController extends Controller
             return redirect()->route('distributor.create');
         }
 
+        if ($user && $user->hasRole('distributor') && !$user->is_approved) {
+            return view('auth.waiting_approval');
+        }
+
         $penerima = Reciepents::all();
         $distributor = Distributor::all();
         $sales = Sales::all(); 
+
+        //akses data dashboard berdasarkan role
 
         if ($user->hasRole('admin')) {
             // Admin melihat semua transaksi
@@ -94,11 +101,31 @@ class DashboardController extends Controller
             }
         }
 
+        //function untuk membuat notifikasi
+        $lowStockAdmin = [];
+        $lowStockDistributor = [];
+        if ($user->hasRole('admin')) {
+            $lowStockAdmin = DB::table('stoks')
+                ->join('distributors', 'stoks.id_toko', '=', 'distributors.id')
+                ->select('distributors.nama_toko', DB::raw('SUM(jumlah_barang) as total_stok'))
+                ->groupBy('stoks.id_toko', 'distributors.nama_toko')
+                ->having('total_stok', '<', 20)
+                ->get();
+        } else {
+            $lowStockDistributor = Stok::where('id_toko', $user->distributor->id)  
+                ->where('jumlah_barang', '<', 20)  
+                ->get();
+        }
 
 
-        return view('auth.dashboard',compact('penerima', 'distributor', 'sales','salesdata','stokdata','totalStok','totalTerjual'));
+
+
+
+        return view('auth.dashboard',compact('penerima', 'distributor', 'sales','salesdata','stokdata','totalStok','totalTerjual','lowStockDistributor','lowStockAdmin'));
         
     }
+
+    
 
 
    

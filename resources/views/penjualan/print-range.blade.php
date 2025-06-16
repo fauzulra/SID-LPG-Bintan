@@ -35,7 +35,7 @@
 </head>
 
 <body>
-    <h2>Laporan Penjualan</h2>
+    <h2>{{ $judul }}</h2>
     <p>Periode: {{ $from->locale('id')->translatedFormat('l, j F Y') }} sampai {{ $to->locale('id')->translatedFormat('l, j F Y') }}</p>
 
     <table>

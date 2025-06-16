@@ -46,7 +46,7 @@
             </a>
         </div>  
         <div class="col-xl-3 col-md-6 mb-4 w-100">
-            <a href="#" data-toggle="modal" data-target="#CreateModal" class="text-decoration-none text-reset   ">
+            <a href="#" data-toggle="modal" data-target="#CreateModal" class="text-decoration-none text-reset d-block">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -63,14 +63,14 @@
                 </div>
             </a>
         </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-                <a href="#" data-toggle="modal" data-target="#PrintModal" class="text-decoration-none text-reset   ">
+        <div class="col-xl-3 col-md-6 mb-4 w-100">
+                <a href="#" data-toggle="modal" data-target="#PrintModal" class="text-decoration-none text-reset d-block">
                 <div class="card border-left-danger shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                    Print Laporan Penjualan </div>
+                                    Print Laporan </div>
                                 <div class="h5 mb-0 font-weight-bold text-white">Cetak Laporan</div>
                             </div>
                             <div class="col-auto">
@@ -86,7 +86,7 @@
         <div class="col-xl-7 col-lg-7">
             <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <div class="text-lg text-info font-weight-bold mb-0">Data Penjualan Subsidi</div>
+                    <div class="text-lg text-info font-weight-bold mb-0">Transaksi terbaru</div>
                 </div>
                 <div class="card-body">
                     @if ($sales->count() > 0)
@@ -185,8 +185,8 @@
                 </div>
             </a>
         </div>
-        <div class="col-xl-3 col-md-6 mb-4 w-100">
-            <a href="#" data-toggle="modal" data-target="#CreateModal" class="text-decoration-none text-reset   ">
+        <div class="col-xl-3 col-md-6 mb-4 ">
+            <a href="#" data-toggle="modal" data-target="#CreateModal" class="text-decoration-none text-reset d-block   ">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -204,13 +204,13 @@
             </a>
         </div>
         <div class="col-xl-3 col-md-6 mb-4">
-            <a href="#" data-toggle="modal" data-target="#PrintModal" class="text-decoration-none text-reset   ">
+            <a href="#" data-toggle="modal" data-target="#PrintModal" class="text-decoration-none text-reset d-block   ">
                 <div class="card border-left-danger shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                    Print Laporan Penjualan </div>
+                                    Print Laporan </div>
                                 <div class="h5 mb-0 font-weight-bold text-white">Cetak Laporan</div>
                             </div>
                             <div class="col-auto">
@@ -226,7 +226,7 @@
         <div class="col-xl-7 col-lg-7">
             <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <div class="text-lg text-info font-weight-bold mb-0">Data Penjualan Subsidi</div>
+                    <div class="text-lg text-info font-weight-bold mb-0">Transaksi Terbaru</div>
                 </div>
                 <div class="card-body">
                     @if ($sales->count() > 0)
